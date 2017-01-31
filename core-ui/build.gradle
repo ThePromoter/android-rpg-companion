@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName '1.0'
+    }
+}
+
+dependencies {
+    compile project(':core-di')
+
+    compile 'com.android.support:appcompat-v7:' + rootProject.ext.supportVersion
+
+    compile 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerVersion
+
+    compile 'com.jakewharton.timber:timber:' + rootProject.ext.timberVersion
+
+    compile 'com.jakewharton:butterknife:' + rootProject.ext.butterknifeVersion
+    annotationProcessor 'com.jakewharton:butterknife-compiler:' + rootProject.ext.butterknifeVersion
+}

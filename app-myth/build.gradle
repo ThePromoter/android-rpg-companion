@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+def versionMajor = 1  // bump for major overhaul changes (no limit)
+def versionMinor = 0  // bump for feature releases (cannot exceed 99)
+def versionPatch = 0  // bump for bugfixes or hotfixes (cannot exceed 99)
+def versionBuild = 0  // bump for betas, etc (cannot exceed 99)
+def MAJOR_MULTIPLIER = 1000000
+def MINOR_MULTIPLIER = 10000
+def PATCH_MULTIPLIER = 100
+def BUILD_MULTIPLIER = 1
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+
+    defaultConfig {
+        applicationId 'com.dpinciotti.rpg.companion.myth'
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode versionMajor * MAJOR_MULTIPLIER +
+                    versionMinor * MINOR_MULTIPLIER +
+                    versionPatch * PATCH_MULTIPLIER +
+                    versionBuild * BUILD_MULTIPLIER
+        if (versionBuild > 0) {
+            // Release candidate builds are considered lower than the final version
+            // (ie 1.0.0 is newer than 1.0.0-RC1)
+            versionCode = versionCode - PATCH_MULTIPLIER
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}-RC${versionBuild}"
+        } else {
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile project(':core-di')
+    compile project(':core-ui')
+
+    compile 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerVersion
+}
